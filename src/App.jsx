@@ -757,67 +757,86 @@ export default function App() {
       }
     ];
 
-    // Seed persistent simulated fleet in memory
+    // Seed persistent simulated fleet in memory with initial history
     initialFleet.forEach(ship => {
-      const shipObj = { ...ship, lastUpdated: new Date() };
+      const shipObj = {
+        ...ship,
+        history: [[ship.lat, ship.lon]],
+        lastUpdated: new Date()
+      };
       simulatedFleetRef.current.set(ship.mmsi, shipObj);
       pendingShipsBuffer.current.set(ship.mmsi, shipObj);
     });
 
-    // High-speed position update loop (simulate live 60fps vessel navigation)
+    // High-speed real-time position update loop (smooth 60fps vessel navigation across ocean trade lanes)
     fallbackIntervalRef.current = setInterval(() => {
       const fleetKeys = Array.from(simulatedFleetRef.current.keys());
       if (fleetKeys.length === 0) return;
 
-      // Select random ship to update position
-      const randomMMSI = fleetKeys[Math.floor(Math.random() * fleetKeys.length)];
-      const ship = simulatedFleetRef.current.get(randomMMSI);
+      // Update ALL underway merchant vessels on every tick for visible, smooth sailing
+      fleetKeys.forEach(mmsi => {
+        const ship = simulatedFleetRef.current.get(mmsi);
+        if (!ship) return;
 
-      if (ship) {
-        // Moored or Anchored ships stay 100% stationary at port berth (0 kn speed, fixed coordinates)
-        const isStationary = ship.navigationalStatus && (
-          ship.navigationalStatus.toLowerCase().includes('moored') ||
-          ship.navigationalStatus.toLowerCase().includes('anchored')
-        );
+        // Smooth cruising velocity scale
+        const speedScale = 0.0020; // Visibly smooth real-time cruising rate across map zoom levels
+        let cog = typeof ship.cog === 'number' ? ship.cog : 90;
+        let sog = typeof ship.sog === 'number' ? ship.sog : 15.0;
 
-        if (isStationary) {
-          const updatedShip = {
-            ...ship,
-            sog: 0.0,
-            lastUpdated: new Date()
-          };
-          simulatedFleetRef.current.set(randomMMSI, updatedShip);
-          pendingShipsBuffer.current.set(randomMMSI, updatedShip);
-          return;
+        // Natural micro-fluctuation in speed (knots) and course (degrees)
+        sog = Math.max(10.5, Math.min(22.0, sog + (Math.random() - 0.5) * 0.1));
+        cog = (cog + (Math.random() - 0.5) * 0.5 + 360) % 360;
+
+        const rad = (cog * Math.PI) / 180;
+        let dLat = Math.cos(rad) * (sog / 15) * speedScale;
+        let dLon = Math.sin(rad) * (sog / 15) * speedScale;
+
+        let newLat = ship.lat + dLat;
+        let newLon = ship.lon + dLon;
+
+        // Regional Navigation Bounds (Indian Ocean, Arabian Sea, Bay of Bengal, Malacca Strait)
+        const minLat = -12.0;
+        const maxLat = 24.5;
+        const minLon = 55.0;
+        const maxLon = 104.5;
+
+        // Graceful heading adjustment when approaching route limits
+        if (newLat < minLat || newLat > maxLat || newLon < minLon || newLon > maxLon) {
+          cog = (cog + 165 + Math.random() * 30) % 360;
+          const newRad = (cog * Math.PI) / 180;
+          dLat = Math.cos(newRad) * (sog / 15) * speedScale;
+          dLon = Math.sin(newRad) * (sog / 15) * speedScale;
+          newLat = Math.max(minLat + 0.2, Math.min(maxLat - 0.2, ship.lat + dLat));
+          newLon = Math.max(minLon + 0.2, Math.min(maxLon - 0.2, ship.lon + dLon));
         }
 
-        // Underway vessels move gently along ocean shipping lanes
-        const rad = (ship.cog * Math.PI) / 180;
-        const deltaLat = (Math.cos(rad) * ship.sog * 0.00008);
-        const deltaLon = (Math.sin(rad) * ship.sog * 0.00008);
-
-        const newLat = ship.lat + deltaLat;
-        const newLon = ship.lon + deltaLon;
-        const newSog = Math.max(8, Math.min(22, ship.sog + (Math.random() - 0.5) * 0.2));
-        const newCog = (ship.cog + (Math.random() - 0.5) * 1.5 + 360) % 360;
+        // Maintain continuous trajectory history for live route trail rendering
+        const history = [...(ship.history || []), [newLat, newLon]].slice(-30);
 
         const updatedShip = {
           ...ship,
           lat: newLat,
           lon: newLon,
-          sog: newSog,
-          cog: newCog,
+          sog,
+          cog,
+          history,
           lastUpdated: new Date()
         };
 
-        simulatedFleetRef.current.set(randomMMSI, updatedShip);
-        pendingShipsBuffer.current.set(randomMMSI, updatedShip);
+        simulatedFleetRef.current.set(mmsi, updatedShip);
+        pendingShipsBuffer.current.set(mmsi, updatedShip);
+      });
 
-        packetCounterRef.current += 1;
-        recentRateCounter.current += 1;
-        queueLog(`MMSI: ${randomMMSI} | Lat: ${newLat.toFixed(4)}, Lon: ${newLon.toFixed(4)} | SOG: ${newSog.toFixed(1)}kn`);
+      packetCounterRef.current += fleetKeys.length;
+      recentRateCounter.current += fleetKeys.length;
+
+      // Sample log for telemetry HUD
+      const sampleMMSI = fleetKeys[Math.floor(Math.random() * fleetKeys.length)];
+      const sampleShip = simulatedFleetRef.current.get(sampleMMSI);
+      if (sampleShip) {
+        queueLog(`Nav [${sampleShip.name}]: ${sampleShip.lat.toFixed(4)}°N, ${sampleShip.lon.toFixed(4)}°E | ${sampleShip.sog.toFixed(1)}kn`);
       }
-    }, 200); // Fast 200ms telemetry updates
+    }, 250); // 250ms smooth update tick
   };
 
   // 5. WebSocket Client setup with Immediate Instant Telemetry Stream

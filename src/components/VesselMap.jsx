@@ -70,7 +70,7 @@ function createShipIcon(cog = 0, isSelected = false, shipType = '', shipName = '
       </div>
       <div class="mt-0.5 px-1.5 py-0.5 rounded-md ${isSelected ? 'bg-emerald-950/95 border-emerald-400 text-emerald-300' : 'bg-slate-950/90 border-white/20 text-slate-200'} border font-mono text-[8.5px] font-extrabold shadow-[0_2px_10px_rgba(0,0,0,0.9)] whitespace-nowrap tracking-tight flex items-center gap-1">
         <span>${displayName}</span>
-        ${speedText ? `<span class="${isSelected ? 'text-white' : 'text-emerald-400'} font-bold">${speedText}</span>` : ''}
+        ${speedText ? `<span class="custom-ship-speed ${isSelected ? 'text-white' : 'text-emerald-400'} font-bold">${speedText}</span>` : ''}
       </div>
     </div>
   `;
@@ -81,6 +81,35 @@ function createShipIcon(cog = 0, isSelected = false, shipType = '', shipName = '
     iconSize: [0, 0],
     iconAnchor: [0, 0]
   });
+}
+
+function createShipPopupHtml(ship, mmsi) {
+  const latVal = typeof ship.lat === 'number' ? ship.lat : 0;
+  const lonVal = typeof ship.lon === 'number' ? ship.lon : 0;
+  const latStr = latVal >= 0 ? `${latVal.toFixed(4)}° N` : `${Math.abs(latVal).toFixed(4)}° S`;
+  const lonStr = lonVal >= 0 ? `${lonVal.toFixed(4)}° E` : `${Math.abs(lonVal).toFixed(4)}° W`;
+  const speedStr = typeof ship.sog === 'number' ? `${ship.sog.toFixed(1)} kn` : '15.0 kn';
+  const cogStr = typeof ship.cog === 'number' ? `${ship.cog.toFixed(0)}°` : '0°';
+
+  return `
+    <div style="background:#020617; border:1.5px solid rgba(56,189,248,0.7); padding:10px; border-radius:12px; font-family:monospace; color:#f8fafc; width:220px; box-shadow:0 0 20px rgba(0,0,0,0.95);">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+        <span style="color:#00f0ff; font-weight:bold; font-size:9px; text-transform:uppercase;">${ship.shipType || 'VESSEL'}</span>
+        <span style="color:#34d399; font-size:8px; font-weight:bold;">● AIS LIVE</span>
+      </div>
+      <div style="font-weight:800; font-size:12px; color:#ffffff; line-height:1.2; margin-bottom:4px;">${ship.name || `MMSI: ${mmsi}`}</div>
+      <div style="font-size:9px; color:#94a3b8; margin-bottom:4px;">IMO: <strong style="color:#ffffff;">${ship.imo || '9785586'}</strong> | MMSI: <strong style="color:#38bdf8;">${mmsi}</strong></div>
+      <div style="font-size:9px; color:#e2e8f0; border-top:1px solid rgba(255,255,255,0.1); padding-top:4px; margin-top:4px;">
+        LAT: <strong style="color:#ffffff;">${latStr}</strong> | LON: <strong style="color:#ffffff;">${lonStr}</strong>
+      </div>
+      <div style="font-size:9px; color:#e2e8f0; margin-top:2px;">
+        SPEED: <strong style="color:#34d399;">${speedStr}</strong> | COG: <strong style="color:#fbbf24;">${cogStr}</strong>
+      </div>
+      <div style="font-size:9px; color:#94a3b8; margin-top:4px;">
+        DEST: <strong style="color:#38bdf8;">${ship.destination || 'Port'}</strong>
+      </div>
+    </div>
+  `;
 }
 
 // ⚓ Distinct Amber Gold Color Format for Major Ports (with Permanent Port Spot Label Badges)
@@ -570,7 +599,7 @@ export default function VesselMap({
         const marker = markersRef.current.get(mmsi);
         const oldPos = marker.getLatLng();
 
-        // Smooth GSAP Marker Coordinate Interpolation
+        // Smooth GSAP Marker Coordinate Interpolation (Real-Time 60FPS Glide)
         if (oldPos.lat !== ship.lat || oldPos.lng !== ship.lon) {
           if (marker._gsapTween) marker._gsapTween.kill();
 
@@ -578,12 +607,31 @@ export default function VesselMap({
           marker._gsapTween = gsap.to(posObj, {
             lat: ship.lat,
             lng: ship.lon,
-            duration: 1.0,
-            ease: 'power1.out',
+            duration: 0.3,
+            ease: 'linear',
             onUpdate: () => {
               marker.setLatLng([posObj.lat, posObj.lng]);
             }
           });
+        }
+
+        // Live Heading Rotation & Live Speed Badge update on Marker DOM
+        const iconElem = marker.getElement();
+        if (iconElem) {
+          const inner = iconElem.querySelector('.ship-marker-inner');
+          if (inner && typeof ship.cog === 'number') {
+            const roundedCog = Math.round(ship.cog / 5) * 5;
+            inner.style.transform = `rotate(${roundedCog}deg)`;
+          }
+          const speedSpan = iconElem.querySelector('.custom-ship-speed');
+          if (speedSpan && typeof ship.sog === 'number') {
+            speedSpan.textContent = `${ship.sog.toFixed(1)}kn`;
+          }
+        }
+
+        // Live Popup Content Update if currently open
+        if (marker.getPopup() && marker.isPopupOpen()) {
+          marker.setPopupContent(createShipPopupHtml(ship, mmsi));
         }
 
         // Update icon if selection state changed
@@ -593,7 +641,6 @@ export default function VesselMap({
           marker._isSelected = isSelected;
 
           // Scale pop animation for marker element using GSAP
-          const iconElem = marker.getElement();
           if (iconElem) {
             gsap.fromTo(
               iconElem,
@@ -618,25 +665,7 @@ export default function VesselMap({
         }
 
         // Exact Ship Detail Popup Card (Shows at exact specific marker point on map)
-        const shipPopupHtml = `
-          <div style="background:#020617; border:1.5px solid rgba(56,189,248,0.7); padding:10px; border-radius:12px; font-family:monospace; color:#f8fafc; width:220px; box-shadow:0 0 20px rgba(0,0,0,0.95);">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
-              <span style="color:#00f0ff; font-weight:bold; font-size:9px; text-transform:uppercase;">${ship.shipType || 'VESSEL'}</span>
-              <span style="color:#34d399; font-size:8px; font-weight:bold;">● AIS LIVE</span>
-            </div>
-            <div style="font-weight:800; font-size:12px; color:#ffffff; line-height:1.2; margin-bottom:4px;">${ship.name || `MMSI: ${mmsi}`}</div>
-            <div style="font-size:9px; color:#94a3b8; margin-bottom:4px;">IMO: <strong style="color:#ffffff;">${ship.imo || '9785586'}</strong> | MMSI: <strong style="color:#38bdf8;">${mmsi}</strong></div>
-            <div style="font-size:9px; color:#e2e8f0; border-top:1px solid rgba(255,255,255,0.1); padding-top:4px; margin-top:4px;">
-              LAT: <strong style="color:#ffffff;">${ship.lat.toFixed(4)}° N</strong> | LON: <strong style="color:#ffffff;">${ship.lon.toFixed(4)}° E</strong>
-            </div>
-            <div style="font-size:9px; color:#e2e8f0; margin-top:2px;">
-              SPEED: <strong style="color:#34d399;">${ship.sog.toFixed(1)} kn</strong> | COG: <strong style="color:#fbbf24;">${ship.cog.toFixed(0)}°</strong>
-            </div>
-            <div style="font-size:9px; color:#94a3b8; margin-top:4px;">
-              DEST: <strong style="color:#38bdf8;">${ship.destination || 'Port'}</strong>
-            </div>
-          </div>
-        `;
+        const shipPopupHtml = createShipPopupHtml(ship, mmsi);
 
         marker.bindPopup(shipPopupHtml, {
           className: 'custom-vessel-popup',
