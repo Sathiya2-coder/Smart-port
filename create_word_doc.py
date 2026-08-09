@@ -69,7 +69,14 @@ def create_document():
     meta_p.add_run("Repository: ").bold = True
     meta_p.add_run("https://github.com/Sathiya2-coder/Smart-port | ")
     meta_p.add_run("Target Duration: ").bold = True
-    meta_p.add_run("Exactly 3:00 Minutes")
+    meta_p.add_run("Exactly 3:00 Minutes\n\n")
+    
+    r_dev = meta_p.add_run("DEVELOPED BY:\n")
+    r_dev.bold = True
+    r_dev.font.color.rgb = TEAL
+    meta_p.add_run("• MANO SATHIYA MOORTHI M R         • NAGA VARSHINI N\n")
+    meta_p.add_run("• KEERTHANA A R                    • ARUN KATHIRESAN M\n")
+    meta_p.add_run("• SWEETY FROST A                   • BARATH KUMAR V")
 
     doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
@@ -231,9 +238,14 @@ def create_document():
         set_cell_margins(cell_q, top=80, bottom=80, left=100, right=100)
         set_cell_margins(cell_a, top=80, bottom=80, left=100, right=100)
 
-    filename = "Smart_Ship_Port_Presentation_Script.docx"
-    doc.save(filename)
-    print("Word Document Successfully Generated:", filename)
+    try:
+        filename = "Smart_Ship_Port_Presentation_Script.docx"
+        doc.save(filename)
+        print("Word Document Successfully Generated:", filename)
+    except PermissionError:
+        filename = "Smart_Ship_Port_Presentation_Script_Team.docx"
+        doc.save(filename)
+        print("File was locked by Word, saved as:", filename)
 
 if __name__ == "__main__":
     create_document()

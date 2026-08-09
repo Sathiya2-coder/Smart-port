@@ -469,14 +469,59 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* Professional Footer */}
-      <footer className="px-6 lg:px-12 py-10 border-t border-white/10 text-left font-mono text-xs text-slate-400">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5 text-white">
-            <img src="/logo.png" alt="Smart Ship Port" className="w-6 h-6 rounded-md object-contain border border-white/20" />
-            <span className="font-bold font-display uppercase tracking-wider">SMART SHIP PORT — NAVIGATION &amp; ALLOCATION</span>
+      {/* Professional Footer with Developed By Credits */}
+      <footer className="px-6 lg:px-12 py-12 border-t border-white/10 text-left font-mono text-xs text-slate-400 bg-slate-950/80 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto flex flex-col gap-8">
+          {/* Top Brand & Developed By Credits */}
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-8 border-b border-white/10">
+            <div className="flex items-center gap-3 text-white">
+              <img src="/logo.png" alt="Smart Ship Port" className="w-8 h-8 rounded-lg object-contain border border-white/20 shadow-lg shadow-sky-500/20" />
+              <div>
+                <div className="font-bold font-display text-sm text-white uppercase tracking-wider">SMART SHIP PORT</div>
+                <div className="text-[10px] text-sky-400 font-mono tracking-widest uppercase">Maritime Navigation &amp; Berth Allocation</div>
+              </div>
+            </div>
+
+            {/* Developed By Team Box */}
+            <div className="bg-slate-900/90 border border-amber-400/30 rounded-xl p-4 lg:px-6 shadow-xl shadow-black/40">
+              <div className="text-[11px] font-bold text-amber-400 font-mono uppercase tracking-widest mb-3 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                DEVELOPED BY
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-[11px] font-semibold text-amber-200/90 font-mono">
+                <div className="flex items-center gap-2">
+                  <span className="text-amber-400/60">•</span> MANO SATHIYA MOORTHI M R
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-amber-400/60">•</span> NAGA VARSHINI N
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-amber-400/60">•</span> KEERTHANA A R
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-amber-400/60">•</span> ARUN KATHIRESAN M
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-amber-400/60">•</span> SWEETY FROST A
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-amber-400/60">•</span> BARATH KUMAR V
+                </div>
+              </div>
+            </div>
           </div>
-          <div>POWERED BY GSAP MOTION &amp; LIVE AIS DATA STREAM</div>
+
+          {/* Bottom Copyright & Tech Info */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 font-mono">
+            <div>&copy; 2026 SMART SHIP PORT — ALL RIGHTS RESERVED</div>
+            <div className="flex items-center gap-4 text-slate-400">
+              <span>POWERED BY GSAP MOTION</span>
+              <span>•</span>
+              <span>REAL-TIME AIS STREAM DATA</span>
+              <span>•</span>
+              <span className="text-emerald-400 font-bold">● SYSTEM OPERATIONAL</span>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
