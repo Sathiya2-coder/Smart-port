@@ -66,6 +66,8 @@ def create_document():
     meta_p.paragraph_format.space_after = Pt(0)
     meta_p.add_run("System: ").bold = True
     meta_p.add_run("Real-Time AIS Vessel Tracker, Sonar Scanner HUD & Predictive Harbor Logistics\n")
+    meta_p.add_run("Institution: ").bold = True
+    meta_p.add_run("National Engineering College, Kovilpatti, Tamil Nadu\n")
     meta_p.add_run("Repository: ").bold = True
     meta_p.add_run("https://github.com/Sathiya2-coder/Smart-port | ")
     meta_p.add_run("Target Duration: ").bold = True

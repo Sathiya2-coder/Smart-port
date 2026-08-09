@@ -484,9 +484,14 @@ export default function HomePage({
 
             {/* Developed By Team Box */}
             <div className="bg-slate-900/90 border border-amber-400/30 rounded-xl p-4 lg:px-6 shadow-xl shadow-black/40">
-              <div className="text-[11px] font-bold text-amber-400 font-mono uppercase tracking-widest mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                DEVELOPED BY
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-2 border-b border-white/10">
+                <div className="text-[11px] font-bold text-amber-400 font-mono uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                  DEVELOPED BY
+                </div>
+                <div className="text-[10.5px] font-bold text-sky-400 font-mono tracking-wider">
+                  National Engineering College, Kovilpatti, Tamil Nadu
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-[11px] font-semibold text-amber-200/90 font-mono">
                 <div className="flex items-center gap-2">
