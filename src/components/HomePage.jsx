@@ -57,34 +57,34 @@ export default function HomePage({
       {/* Calligraphic Script Hero Section (Matching Reference Image) */}
       <section className="min-h-[75vh] flex flex-col items-center justify-center pt-16 pb-12 px-6 text-center relative max-w-5xl mx-auto">
         <div ref={heroRef} className="flex flex-col items-center gap-4">
-          {/* Cursive Sub-Eyebrow (Matching Reference Image "Discover") */}
-          <span className="font-script text-4xl sm:text-5xl md:text-6xl text-white/95 drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)] tracking-wide">
-            Discover
+          {/* Cursive Sub-Eyebrow */}
+          <span className="font-script text-4xl sm:text-5xl md:text-6xl text-emerald-400 drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)] tracking-wide">
+            Next-Gen Maritime Intelligence
           </span>
 
-          {/* Grand Calligraphic Serif Display Title (Matching Reference Image "North Lake") */}
+          {/* Grand Display Title */}
           <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold font-serif italic text-white leading-[1.0] tracking-tight drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)] my-1">
-            Smart Port
+            Smart Ship Port
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-200 font-medium leading-relaxed max-w-xl drop-shadow-md mb-2">
-            Real-time global vessel tracking, AIS stream telemetry, and predictive harbor logistics framework.
+          <p className="text-sm sm:text-base text-slate-200 font-medium leading-relaxed max-w-2xl drop-shadow-md mb-2">
+            Real-time global vessel tracking, live AIS stream telemetry, tactical Sonar HUD scanning, and automated harbor berth allocation.
           </p>
 
-          {/* Centered Clean White Button (Matching Reference Image "EXPLORE NOW") */}
+          {/* Centered Clean White & Glass Buttons */}
           <div className="flex items-center justify-center gap-4 mt-2">
             <button
               onClick={onLaunchMap}
               className="bg-white text-slate-950 font-extrabold px-9 py-3.5 uppercase tracking-widest text-xs shadow-2xl hover:bg-slate-100 hover:scale-105 transition-all duration-300 rounded-sm"
             >
-              EXPLORE NOW
+              LAUNCH LIVE MAP
             </button>
 
             <button
               onClick={onActivateRadar}
-              className="bg-white/10 border border-white/40 backdrop-blur-md text-white font-bold px-7 py-3.5 uppercase tracking-widest text-xs hover:bg-white/20 transition-all duration-300 rounded-sm"
+              className="bg-emerald-500/20 border border-emerald-400/50 backdrop-blur-md text-emerald-300 font-bold px-7 py-3.5 uppercase tracking-widest text-xs hover:bg-emerald-500 hover:text-slate-950 transition-all duration-300 rounded-sm shadow-[0_0_15px_rgba(16,185,129,0.3)]"
             >
-              SONAR HUD
+              SONAR RADAR HUD
             </button>
           </div>
         </div>
@@ -94,36 +94,36 @@ export default function HomePage({
       <section className="px-6 lg:px-12 py-6 max-w-7xl mx-auto">
         <div ref={statsRef} className="doppelrand-shell">
           <div className="doppelrand-core p-6 grid grid-cols-2 md:grid-cols-4 gap-6 border border-white/10">
-            <div className="flex flex-col items-start text-left pl-4 border-l-2 border-white/40">
+            <div className="flex flex-col items-start text-left pl-4 border-l-2 border-emerald-400">
               <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-slate-300 font-bold">
                 ACTIVE FLEET
               </span>
               <GsapCounter value={shipsCount} className="text-3xl sm:text-4xl font-extrabold font-mono text-white mt-1" />
-              <span className="text-[10px] text-slate-400 font-mono mt-0.5">Tracked Vessels</span>
+              <span className="text-[10px] text-slate-400 font-mono mt-0.5">Live Merchant Vessels</span>
             </div>
 
-            <div className="flex flex-col items-start text-left pl-4 border-l-2 border-white/40">
+            <div className="flex flex-col items-start text-left pl-4 border-l-2 border-emerald-400">
               <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-slate-300 font-bold">
-                PACKET THROUGHPUT
+                TELEMETRY THROUGHPUT
               </span>
               <GsapCounter value={totalMessages} className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400 mt-1" />
               <span className="text-[10px] text-slate-400 font-mono mt-0.5">Ingested AIS Messages</span>
             </div>
 
-            <div className="flex flex-col items-start text-left pl-4 border-l-2 border-white/40">
+            <div className="flex flex-col items-start text-left pl-4 border-l-2 border-emerald-400">
               <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-slate-300 font-bold">
-                INGESTION RATE
+                STREAM REFRESH RATE
               </span>
               <GsapCounter value={messageRate} suffix=" /s" className="text-3xl sm:text-4xl font-extrabold font-mono text-amber-300 mt-1" />
               <span className="text-[10px] text-slate-400 font-mono mt-0.5">Real-Time Ingestion</span>
             </div>
 
-            <div className="flex flex-col items-start text-left pl-4 border-l-2 border-white/40">
+            <div className="flex flex-col items-start text-left pl-4 border-l-2 border-emerald-400">
               <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-slate-300 font-bold">
-                HARBOR COVERAGE
+                INDIAN OCEAN HUBS
               </span>
-              <span className="text-3xl sm:text-4xl font-extrabold font-mono text-white mt-1">1,240+</span>
-              <span className="text-[10px] text-slate-400 font-mono mt-0.5">International Ports</span>
+              <span className="text-3xl sm:text-4xl font-extrabold font-mono text-white mt-1">10 Ports</span>
+              <span className="text-[10px] text-slate-400 font-mono mt-0.5">Active Berths &amp; Gates</span>
             </div>
           </div>
         </div>
@@ -132,28 +132,28 @@ export default function HomePage({
       {/* Feature Bento Grid Section */}
       <section className="px-6 lg:px-12 py-12 max-w-7xl mx-auto">
         <div className="text-left mb-10">
-          <span className="px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-white">
-            PLATFORM CAPABILITIES
+          <span className="px-3.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-emerald-300">
+            SMART PORT CAPABILITIES
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-white mt-2">
-            Built for Mission-Critical Maritime Operations
+            Mission-Critical Maritime Navigation &amp; Allocation
           </h2>
         </div>
 
         <div ref={bentoRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1 - Large Bento */}
-          <div className="md:col-span-2 doppelrand-shell group hover:border-white/40 transition-all duration-300">
+          <div className="md:col-span-2 doppelrand-shell group hover:border-emerald-500/40 transition-all duration-300">
             <div className="doppelrand-core p-7 h-full flex flex-col justify-between border border-white/10 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] pointer-events-none" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none" />
               <div>
-                <div className="w-11 h-11 rounded-xl bg-white/15 border border-white/30 flex items-center justify-center text-white mb-4 shadow-md">
-                  <Ship className="w-5.5 h-5.5" />
+                <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400 mb-4 shadow-md">
+                  <Navigation className="w-5.5 h-5.5" />
                 </div>
                 <h3 className="text-xl font-bold font-display text-white">
-                  Smooth Coordinate Vector Interpolation
+                  Real-Time Vessel Navigation &amp; Vector Interpolation
                 </h3>
                 <p className="text-sm text-slate-300 mt-2 leading-relaxed max-w-xl">
-                  GSAP vector engines smoothly transition live latitude, longitude, and heading angles across map tiles, eliminating marker jumps and visual stuttering.
+                  GSAP vector engines smoothly transition live latitude, longitude, and true heading angles across nautical map tiles, providing ultra-precise navigation tracks without visual stuttering.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between font-mono text-xs text-white font-bold">
@@ -164,69 +164,69 @@ export default function HomePage({
           </div>
 
           {/* Card 2 */}
-          <div className="doppelrand-shell group hover:border-white/40 transition-all duration-300">
+          <div className="doppelrand-shell group hover:border-emerald-500/40 transition-all duration-300">
             <div className="doppelrand-core p-7 h-full flex flex-col justify-between border border-white/10">
               <div>
-                <div className="w-11 h-11 rounded-xl bg-white/15 border border-white/30 flex items-center justify-center text-white mb-4 shadow-md">
-                  <Radio className="w-5.5 h-5.5 text-white animate-pulse" />
+                <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400 mb-4 shadow-md">
+                  <Radio className="w-5.5 h-5.5 text-emerald-400 animate-pulse" />
                 </div>
                 <h3 className="text-lg font-bold font-display text-white">
                   Tactical Sonar Radar HUD
                 </h3>
                 <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                  360° rotating radar beam sweeps, target acquisition reticles, and range rings for target monitoring.
+                  360° rotating radar beam sweeps, multi-category target filters, and 1-click trajectory route tracking on the live map.
                 </p>
               </div>
               <button
                 onClick={onActivateRadar}
-                className="mt-6 text-xs font-mono font-bold text-white flex items-center gap-1.5 hover:text-slate-300 transition"
+                className="mt-6 text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5 hover:text-emerald-300 transition"
               >
-                <span>OPEN HUD</span>
+                <span>OPEN HUD SCANNER</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
           {/* Card 3 */}
-          <div className="doppelrand-shell group hover:border-white/40 transition-all duration-300">
+          <div className="doppelrand-shell group hover:border-amber-400/40 transition-all duration-300">
             <div className="doppelrand-core p-7 h-full flex flex-col justify-between border border-white/10">
               <div>
-                <div className="w-11 h-11 rounded-xl bg-white/15 border border-white/30 flex items-center justify-center text-white mb-4 shadow-md">
-                  <Terminal className="w-5.5 h-5.5 text-white" />
+                <div className="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-300 mb-4 shadow-md">
+                  <Anchor className="w-5.5 h-5.5 text-amber-300" />
                 </div>
                 <h3 className="text-lg font-bold font-display text-white">
-                  Zero-Overhead AIS Stream Log
+                  Automated Berth &amp; Gate Allocation
                 </h3>
                 <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                  High-throughput WebSockets stream global vessel telemetry without blocking UI thread render loops.
+                  Live monitoring of Indian Ocean port congestion, berth turnaround schedules, and automated pilot dispatch allocations.
                 </p>
               </div>
-              <div className="mt-6 font-mono text-[10px] text-emerald-400 font-bold">
-                LOG BUFFER: ONLINE
+              <div className="mt-6 font-mono text-[10px] text-amber-300 font-bold">
+                BERTH ALLOCATION: OPTIMIZED
               </div>
             </div>
           </div>
 
           {/* Card 4 - Large Bento */}
-          <div className="md:col-span-2 doppelrand-shell group hover:border-white/40 transition-all duration-300">
+          <div className="md:col-span-2 doppelrand-shell group hover:border-sky-500/40 transition-all duration-300">
             <div className="doppelrand-core p-7 h-full flex flex-col justify-between border border-white/10 relative overflow-hidden">
-              <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] pointer-events-none" />
+              <div className="absolute bottom-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-[80px] pointer-events-none" />
               <div>
-                <div className="w-11 h-11 rounded-xl bg-white/15 border border-white/30 flex items-center justify-center text-white mb-4 shadow-md">
-                  <Layers className="w-5.5 h-5.5 text-white" />
+                <div className="w-11 h-11 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400 mb-4 shadow-md">
+                  <Layers className="w-5.5 h-5.5 text-sky-400" />
                 </div>
                 <h3 className="text-xl font-bold font-display text-white">
-                  Multi-Layer Satellite Cartography
+                  Multi-Layer Tactical Marine Cartography
                 </h3>
                 <p className="text-sm text-slate-300 mt-2 leading-relaxed max-w-xl">
-                  Switch instantly between dark mode oceanic maps, Esri High-Res Satellite imagery, and OpenStreetMap street views for complete situational awareness.
+                  Switch instantly between dark mode nautical cartography, Esri High-Resolution Satellite imagery, and OpenStreetMap street layers with hardware-accelerated rendering.
                 </p>
               </div>
               <button
                 onClick={onLaunchMap}
-                className="mt-6 text-xs font-mono font-bold text-white flex items-center gap-1.5 hover:text-slate-300 transition"
+                className="mt-6 text-xs font-mono font-bold text-sky-400 flex items-center gap-1.5 hover:text-sky-300 transition"
               >
-                <span>OPEN MAP WORKSPACE</span>
+                <span>LAUNCH NAVIGATION MAP</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -472,11 +472,11 @@ export default function HomePage({
       {/* Professional Footer */}
       <footer className="px-6 lg:px-12 py-10 border-t border-white/10 text-left font-mono text-xs text-slate-400">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-white">
-            <Ship className="w-4 h-4 text-white" />
-            <span className="font-bold font-display">GLOBAL VESSEL TRACKER ENTERPRISE</span>
+          <div className="flex items-center gap-2.5 text-white">
+            <img src="/logo.png" alt="Smart Ship Port" className="w-6 h-6 rounded-md object-contain border border-white/20" />
+            <span className="font-bold font-display uppercase tracking-wider">SMART SHIP PORT — NAVIGATION &amp; ALLOCATION</span>
           </div>
-          <div>POWERED BY GSAP &amp; REAL-TIME AIS DATA FEED</div>
+          <div>POWERED BY GSAP MOTION &amp; LIVE AIS DATA STREAM</div>
         </div>
       </footer>
     </div>
