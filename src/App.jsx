@@ -956,12 +956,10 @@ export default function App() {
             <div>
               <div className="flex items-center justify-between pb-6 border-b border-white/15">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/30 flex items-center justify-center text-white shadow-lg">
-                    <Ship className="w-5 h-5 text-white" />
-                  </div>
+                  <img src="/logo.png" alt="Smart Ship Port" className="w-10 h-10 rounded-xl object-contain shadow-lg border border-white/20" />
                   <div>
-                    <h2 className="text-sm font-black font-display uppercase tracking-widest text-white">GLOBAL VESSEL</h2>
-                    <p className="text-[10px] font-mono text-emerald-400">MARITIME AI EXPLORER</p>
+                    <h2 className="text-sm font-black font-display uppercase tracking-widest text-white">SMART SHIP PORT</h2>
+                    <p className="text-[10px] font-mono text-emerald-400">NAVIGATION & ALLOCATION</p>
                   </div>
                 </div>
                 <button
@@ -1058,11 +1056,9 @@ export default function App() {
           </button>
 
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setCurrentView('home')}>
-            <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/30 flex items-center justify-center text-white shadow-lg">
-              <Ship className="w-4 h-4 text-white" />
-            </div>
+            <img src="/logo.png" alt="Smart Ship Port" className="w-8 h-8 rounded-lg object-contain shadow-lg border border-white/20" />
             <span className="text-sm font-extrabold font-display uppercase tracking-widest text-white">
-              GLOBAL VESSEL
+              SMART SHIP PORT
             </span>
           </div>
         </div>
