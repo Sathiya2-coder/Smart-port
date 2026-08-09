@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Vessel Tracker - Live AIS Map</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Bar -->
+        <header class="navbar">
+            <div class="brand">
+                <div class="radar-icon">
+                    <i class="fa-solid fa-ship"></i>
+                    <span class="radar-sweep"></span>
+                </div>
+                <div class="brand-text">
+                    <h1>Global Vessel Tracker</h1>
+                    <span class="sub-title">Real-Time AIS Stream Monitoring</span>
+                </div>
+            </div>
+
+            <!-- Header Stats -->
+            <div class="header-stats">
+                <div class="stat-pill">
+                    <span class="stat-label">Active Ships</span>
+                    <span class="stat-value" id="stat-ships-count">0</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="stat-label">Messages Received</span>
+                    <span class="stat-value" id="stat-msg-count">0</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="stat-label">Rate</span>
+                    <span class="stat-value" id="stat-rate">0 /s</span>
+                </div>
+                <div class="status-badge connected" id="connection-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text" id="status-text">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Sidebar Drawer -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h2><i class="fa-solid fa-compass"></i> Fleet Directory</h2>
+                    <button class="toggle-sidebar-btn" id="toggle-sidebar" title="Collapse Sidebar">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                </div>
+
+                <!-- Search & Filters -->
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-input" placeholder="Search by MMSI / Ship ID...">
+                </div>
+
+                <div class="filter-bar">
+                    <button class="filter-chip active" data-filter="all">All Ships</button>
+                    <button class="filter-chip" data-filter="moving">Moving (>0.5 kn)</button>
+                    <button class="filter-chip" data-filter="anchored">Anchored</button>
+                </div>
+
+                <!-- Vessels List -->
+                <div class="vessels-list-container">
+                    <div class="vessels-list-header">
+                        <span>Ship MMSI</span>
+                        <span>Speed / Heading</span>
+                    </div>
+                    <ul class="vessels-list" id="vessels-list">
+                        <li class="empty-state">
+                            <i class="fa-solid fa-satellite-dish"></i>
+                            <p>Waiting for live AIS signals...</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Live Feed Console -->
+                <div class="live-log-container">
+                    <div class="log-header">
+                        <span><i class="fa-solid fa-terminal"></i> Live Data Feed</span>
+                        <button id="clear-log-btn" title="Clear log">Clear</button>
+                    </div>
+                    <div class="log-stream" id="log-stream">
+                        <div class="log-entry system">System initialized. Connecting to stream backend...</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Map Container -->
+            <div class="map-wrapper">
+                <div id="map"></div>
+
+                <!-- Map Controls Overlay -->
+                <div class="map-overlay-controls">
+                    <div class="map-style-switcher">
+                        <button class="map-style-btn active" data-style="dark" title="Dark Canvas">
+                            <i class="fa-solid fa-moon"></i> Dark
+                        </button>
+                        <button class="map-style-btn" data-style="satellite" title="Satellite View">
+                            <i class="fa-solid fa-globe"></i> Satellite
+                        </button>
+                        <button class="map-style-btn" data-style="osm" title="OpenStreetMap">
+                            <i class="fa-solid fa-map"></i> Street
+                        </button>
+                    </div>
+
+                    <button class="action-btn" id="recenter-btn" title="Fit All Ships in View">
+                        <i class="fa-solid fa-expand"></i> Recenter Map
+                    </button>
+                </div>
+
+                <!-- Selected Vessel Card Overlay -->
+                <div class="vessel-card-overlay hidden" id="vessel-card">
+                    <button class="close-card-btn" id="close-vessel-card">&times;</button>
+                    <div class="vessel-card-header">
+                        <i class="fa-solid fa-ship ship-badge-icon"></i>
+                        <div>
+                            <h3 id="card-mmsi">MMSI: ---</h3>
+                            <span class="vessel-type-badge" id="card-status-badge">POSITION REPORT</span>
+                        </div>
+                    </div>
+
+                    <div class="vessel-card-grid">
+                        <div class="card-metric">
+                            <span class="metric-label">Latitude</span>
+                            <span class="metric-value" id="card-lat">--</span>
+                        </div>
+                        <div class="card-metric">
+                            <span class="metric-label">Longitude</span>
+                            <span class="metric-value" id="card-lon">--</span>
+                        </div>
+                        <div class="card-metric">
+                            <span class="metric-label">Speed (SOG)</span>
+                            <span class="metric-value" id="card-speed">-- kn</span>
+                        </div>
+                        <div class="card-metric">
+                            <span class="metric-label">Course (COG)</span>
+                            <span class="metric-value" id="card-cog">--°</span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <span class="last-seen-text">Last ping: <strong id="card-last-seen">Just now</strong></span>
+                        <button class="track-btn" id="track-ship-btn"><i class="fa-solid fa-route"></i> Track Path</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Custom Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
