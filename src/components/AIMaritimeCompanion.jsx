@@ -33,7 +33,9 @@ import {
 } from 'lucide-react';
 import { gsap } from 'gsap';
 
-const GEMINI_API_KEY = "AIzaSyBkE5PNWd_ok-CkEPEc_U4FrhlylJa663U";
+const GEMINI_API_KEY = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GEMINI_API_KEY)
+  ? import.meta.env.VITE_GEMINI_API_KEY
+  : "AIzaSyBkE5PNWd_ok-CkEPEc_U4FrhlylJa663U";
 
 // Indian Ocean Ports Dataset for Spatial Proximity Calculations
 const INDIAN_OCEAN_PORTS = [
