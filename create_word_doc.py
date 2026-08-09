@@ -73,7 +73,7 @@ def create_document():
     meta_p.add_run("Target Duration: ").bold = True
     meta_p.add_run("Exactly 3:00 Minutes\n\n")
     
-    r_dev = meta_p.add_run("DEVELOPED BY:\n")
+    r_dev = meta_p.add_run("DEVELOPED BY STUDENTS (National Engineering College, Kovilpatti, Tamil Nadu):\n")
     r_dev.bold = True
     r_dev.font.color.rgb = TEAL
     meta_p.add_run("• MANO SATHIYA MOORTHI M R         • NAGA VARSHINI N\n")

@@ -487,7 +487,7 @@ export default function HomePage({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-2 border-b border-white/10">
                 <div className="text-[11px] font-bold text-amber-400 font-mono uppercase tracking-widest flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                  DEVELOPED BY
+                  DEVELOPED BY STUDENTS FROM
                 </div>
                 <div className="text-[10.5px] font-bold text-sky-400 font-mono tracking-wider">
                   National Engineering College, Kovilpatti, Tamil Nadu
